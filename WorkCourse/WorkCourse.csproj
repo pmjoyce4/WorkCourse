@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E7A9DE62-7DD1-4C49-B636-3B42A53EDF4B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WorkCourse</RootNamespace>
+    <AssemblyName>WorkCourse</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\clsCourse.cs" />
+    <Compile Include="Classes\clsCourseManager.cs" />
+    <Compile Include="Classes\clsFolder.cs" />
+    <Compile Include="Classes\clsFolders.cs" />
+    <Compile Include="Classes\clsSlot.cs" />
+    <Compile Include="Classes\clsWaypoint.cs" />
+    <Compile Include="Classes\clsXmlSaveLoad.cs" />
+    <Compile Include="Forms\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Classes\clsSaveSlot.cs" />
+    <EmbeddedResource Include="Forms\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\PanZoomBox\PanZoomBox\PanZoomBox.csproj">
+      <Project>{7BFA76A2-3D74-49E1-810C-22A7C47D95CD}</Project>
+      <Name>PanZoomBox</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseManager.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0001.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0002.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0003.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0004.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0005.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0006.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0007.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0008.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0009.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0010.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0011.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0012.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0013.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0014.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0015.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0016.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0017.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0018.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0019.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0020.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0021.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0022.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0023.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0024.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0025.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0026.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0027.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0028.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0029.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0030.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0031.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0032.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0033.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0034.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0035.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0036.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0037.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0038.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0039.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0040.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0041.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0042.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0043.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0044.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0045.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0046.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0047.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0048.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0049.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0050.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0051.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0052.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0053.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0054.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0055.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0056.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0057.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0058.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0059.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0060.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0061.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0062.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0063.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0064.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0065.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0066.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0067.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0068.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0069.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0070.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0071.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0072.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0073.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0074.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0075.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0076.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0077.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0078.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0079.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0080.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0081.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0082.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0083.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0084.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0085.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0086.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0087.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0088.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0089.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0090.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0091.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0092.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0093.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0094.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0095.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0096.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0097.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0098.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0099.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0100.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0101.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0102.xml" />
+    <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseStorage0103.xml" />
+    <Content Include="TestFiles\CourseFiles\sosnovka\Course01.xml" />
+    <Content Include="TestFiles\CourseFiles\sosnovka\courseManager.xml" />
+    <Content Include="TestFiles\Map bitmaps\GoldcrestValley.bmp" />
+    <Content Include="TestFiles\Map bitmaps\GoldcrestValley.dds" />
+    <Content Include="TestFiles\Map bitmaps\sosnovka.bmp" />
+    <Content Include="TestFiles\Map bitmaps\sosnovka.dds" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
