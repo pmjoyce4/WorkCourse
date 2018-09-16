@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PanZoomBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PanZoomBox\PanZoomBox\bin\Debug\PanZoomBox.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\clsCourse.cs" />
+    <Compile Include="Classes\clsCourseDrawer.cs" />
     <Compile Include="Classes\clsCourseManager.cs" />
     <Compile Include="Classes\clsFolder.cs" />
     <Compile Include="Classes\clsFolders.cs" />
@@ -83,12 +88,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\PanZoomBox\PanZoomBox\PanZoomBox.csproj">
-      <Project>{7BFA76A2-3D74-49E1-810C-22A7C47D95CD}</Project>
-      <Name>PanZoomBox</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestFiles\CourseFiles\GoldCrestValley\courseManager.xml" />

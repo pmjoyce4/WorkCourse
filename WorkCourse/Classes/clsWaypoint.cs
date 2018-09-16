@@ -38,8 +38,7 @@ namespace WorkCourse
         public int? Lane;
 
         #region XmlSerializeValues
-        // Because XmlSerializer can't handle ~complex~ values stored as an XmlAttributes, Nullable int, which can be an int or null, is not
-        // supported. 
+        // The fact that XmlSerializer can handle null strings as XmlAttributes, but not nullable primatives completely baffles me...
         [XmlAttribute("angle")]
         public string AngleString
         {
@@ -61,7 +60,7 @@ namespace WorkCourse
         [XmlAttribute("unload")]
         public string UnloadString
         {
-            get { if (!Unload.HasValue) return null; return (Unload.Value) ? "1" : null; }
+            get { return XmlNumericBool(Unload); }
             set { Unload = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute]
@@ -73,7 +72,7 @@ namespace WorkCourse
         [XmlAttribute("rev")]
         public string ReverseString
         {
-            get { if (!Reverse.HasValue) return null; return (Reverse.Value) ? "1" : null; }
+            get { return XmlNumericBool(Reverse); }
             set { Reverse = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("pos")]
@@ -91,25 +90,25 @@ namespace WorkCourse
         [XmlAttribute("crossing")]
         public string CrossingString
         {
-            get { if (!Crossing.HasValue) return null; return (Crossing.Value) ? "1" : null; }
+            get { return XmlNumericBool(Crossing); }
             set { Crossing = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("wait")]
         public string WaitString
         {
-            get { if (!Wait.HasValue) return null; return (Wait.Value) ? "1" : null; }
+            get { return XmlNumericBool(Wait); }
             set { Wait = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("turnstart")]
         public string TurnStartString
         {
-            get { if (!TurnStart.HasValue) return null; return (TurnStart.Value) ? "1" : null; }
+            get { return XmlNumericBool(TurnStart); }
             set { TurnStart = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("turnend")]
         public string TurnEndString
         {
-            get { if (!TurnEnd.HasValue) return null; return (TurnEnd.Value) ? "1" : null; }
+            get { return XmlNumericBool(TurnEnd); }
             set { TurnEnd = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("lane")]
@@ -120,5 +119,19 @@ namespace WorkCourse
         }
         #endregion
         #endregion
+
+        private string XmlNumericBool(bool? varBool)
+        {
+            if (!varBool.Value)
+                return null;
+            if (varBool.Value)
+            {
+                return "1";
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
