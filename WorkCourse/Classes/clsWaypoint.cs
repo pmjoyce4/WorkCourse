@@ -17,6 +17,8 @@ namespace WorkCourse
         [XmlIgnore]
         public double? Angle;
         [XmlIgnore]
+        public int? Direction;
+        [XmlIgnore]
         public double? Speed;
         [XmlIgnore]
         public bool? Wait;
@@ -37,7 +39,7 @@ namespace WorkCourse
         [XmlIgnore]
         public int? Lane;
 
-        #region XmlSerializeValues
+        #region XmlSerializeProperties
         // Because XmlSerializer can't handle ~complex~ values stored as an XmlAttributes, Nullable int, which can be an int or null, is not
         // supported. 
         [XmlAttribute("angle")]
@@ -45,6 +47,12 @@ namespace WorkCourse
         {
             get { if (!Angle.HasValue) return null; return string.Format("{0:0.00}", Angle); }
             set { Angle = Convert.ToDouble(value); }
+        }
+        [XmlAttribute("dir")]
+        public string DirectionString
+        {
+            get { if (!Direction.HasValue) return null; return string.Format("0:00", Direction); }
+            set { Direction = Convert.ToInt32(value); }
         }
         [XmlAttribute("generated")]
         public string GeneratedString
@@ -61,7 +69,7 @@ namespace WorkCourse
         [XmlAttribute("unload")]
         public string UnloadString
         {
-            get { if (!Unload.HasValue) return null; return (Unload.Value) ? "1" : null; }
+            get { return NumericBool(Unload); }
             set { Unload = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute]
@@ -73,7 +81,7 @@ namespace WorkCourse
         [XmlAttribute("rev")]
         public string ReverseString
         {
-            get { if (!Reverse.HasValue) return null; return (Reverse.Value) ? "1" : null; }
+            get { return NumericBool(Reverse); }
             set { Reverse = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("pos")]
@@ -91,25 +99,25 @@ namespace WorkCourse
         [XmlAttribute("crossing")]
         public string CrossingString
         {
-            get { if (!Crossing.HasValue) return null; return (Crossing.Value) ? "1" : null; }
+            get { return NumericBool(Crossing); }
             set { Crossing = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("wait")]
         public string WaitString
         {
-            get { if (!Wait.HasValue) return null; return (Wait.Value) ? "1" : null; }
+            get { return NumericBool(Wait); }
             set { Wait = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("turnstart")]
         public string TurnStartString
         {
-            get { if (!TurnStart.HasValue) return null; return (TurnStart.Value) ? "1" : null; }
+            get { return NumericBool(TurnStart); }
             set { TurnStart = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("turnend")]
         public string TurnEndString
         {
-            get { if (!TurnEnd.HasValue) return null; return (TurnEnd.Value) ? "1" : null; }
+            get { return NumericBool(TurnEnd); }
             set { TurnEnd = (Convert.ToInt32(value) == 1); }
         }
         [XmlAttribute("lane")]
@@ -119,6 +127,16 @@ namespace WorkCourse
             set { Lane = Convert.ToInt32(value); }
         }
         #endregion
+        #endregion
+
+        #region XmlSerializeFunctions
+
+        private string NumericBool(bool? varNullBool)
+        {
+            if (!varNullBool.HasValue)
+                return null;
+            return varNullBool.Value ? "1" : null;  // False == null so we don't bloat Xml with useless value names. They're considered false already if not present.
+        }
         #endregion
     }
 }

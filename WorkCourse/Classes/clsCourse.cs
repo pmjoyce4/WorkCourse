@@ -13,39 +13,57 @@ namespace WorkCourse
     [XmlRoot("course")]
     public class clsCourse : IXmlSerializable
     {
-        private bool numHeadlandLanesValid;
-        private int numHeadlandLanesInt;
-        private bool workWidthDoubleValid;
-        private double workWidthDouble;
-        private string headlandDirectionCWString;
+        private int? numHeadlandLanes;
+        private double? workWidth;
+        private bool? headlandDirectionCW;
         public clsCourse() { waypoint = new List<clsWaypoint>(); }
         public List<clsWaypoint> waypoint;
 
-        [XmlAttribute]
-        public string workWidth
+        [XmlAttribute("workWidth")]
+        public string WorkWidthString
         {
             get
             {
-                if (workWidthDoubleValid)
-                    return string.Format("{0:0.000000}", workWidthDouble);
+                if (workWidth.HasValue)
+                    return string.Format("{0:0.000000}", workWidth);
                 return null;
             }
-            set {
-                if (value != null)
-                {
-                    workWidthDouble = Convert.ToDouble(value);
-                    workWidthDoubleValid = true;
-                }
-                else
-                {
-                    workWidthDoubleValid = false;
-                }
+            set
+            {
+                    workWidth = Convert.ToDouble(value);
             }
         }
-        [XmlAttribute]
-        public string numHeadlandLanes { get; set; }
-        [XmlAttribute]
-        public string headlandDirectionCW { get; set; }
+        [XmlAttribute("numHeadlandLanes")]
+        public string numHeadlandLanesString
+        {
+            get
+            {
+                if (numHeadlandLanes.HasValue)
+                    return numHeadlandLanes.ToString();
+                return null;
+            }
+            set
+            {
+                numHeadlandLanes = Convert.ToInt32(value);
+            }
+        }
+        [XmlAttribute("headlandDirectionCW")]
+        public string headlandDirectionCWString
+        {
+            get
+            {
+                if (headlandDirectionCW.HasValue)
+                    return headlandDirectionCW.ToString().ToLower();
+                return null;
+            }
+            set
+            {
+                if (value == "true")
+                    headlandDirectionCW = true;
+                headlandDirectionCW = false;
+
+            }
+        }
 
         #region XML_Stuff
         // Get the messy XML stuff out of the way. This is only necessary because CoursePlay records waypoints with an
@@ -59,18 +77,20 @@ namespace WorkCourse
         {
             do
             {
-                if (reader.Name.Contains("course"))
+                if (reader.Name.Contains("course") && reader.HasAttributes)
                 {
-                    if (reader.HasAttributes)
+                    for (int i = 0; i < reader.AttributeCount; i++)
                     {
-                        for (int i = 0; i < reader.AttributeCount; i++)
+                        // Take care of this courses properties via reflection.
+                        reader.MoveToNextAttribute();
+                        foreach (PropertyInfo prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                         {
-                            // Take care of this courses properties via reflection.
-                            reader.MoveToNextAttribute();
-                            PropertyInfo prop = this.GetType().GetProperty(reader.Name, BindingFlags.Public | BindingFlags.Instance);
-                            if (prop != null && prop.CanWrite)
+                            foreach (XmlAttributeAttribute attrib in prop.GetCustomAttributes(typeof(XmlAttributeAttribute), false))
                             {
-                                prop.SetValue(this, reader.Value, null);
+                                if (attrib.AttributeName == reader.Name)
+                                {
+                                    prop.SetValue(this, reader.Value, null);
+                                }
                             }
                         }
                     }
@@ -100,7 +120,6 @@ namespace WorkCourse
                         writer.WriteAttributeString(prop.Name, prop.GetValue(this, null).ToString());
                 }
             }
-            //TODO: Add course data handler....
             int Index = 1;
             foreach (clsWaypoint CurrentWaypoint in waypoint)
             {

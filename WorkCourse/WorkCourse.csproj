@@ -85,7 +85,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\PanZoomBox\PanZoomBox\PanZoomBox.csproj">
+    <ProjectReference Include="..\..\PanZoomBox\PanZoomBox\PanZoomBox.csproj">
       <Project>{7BFA76A2-3D74-49E1-810C-22A7C47D95CD}</Project>
       <Name>PanZoomBox</Name>
     </ProjectReference>
