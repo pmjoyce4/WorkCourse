@@ -29,7 +29,6 @@ namespace WorkCourse
                 clsCourse CurrentCourse = new clsCourse();
                 CurrentCourse = clsXmlSaveLoad.DeserializeXmlFromFile<clsCourse>(Path + System.IO.Path.DirectorySeparatorChar + CurrentSlot.fileName);
                 CurrentSlot.course = CurrentCourse;
-                Console.WriteLine(clsXmlSaveLoad.SerializeXmlToString<clsCourse>(CurrentCourse));
             }
         }
 

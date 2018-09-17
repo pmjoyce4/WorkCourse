@@ -8,6 +8,7 @@ namespace WorkCourse
 {
     class clsCourseDrawer
     {
+        // Can probably make this private... we'll see.
         public enum pen
         {
             Selected,
@@ -51,33 +52,80 @@ namespace WorkCourse
             pens.Add(pen.Default, new Pen(Brushes.DarkBlue));
         }
 
-        private bool Visible(PointF Point, Rectangle ViewPort, double ZoomFactor)
+        private void DrawCircle(Pen Pen, Graphics g, PointF Center, float Diameter)
         {
-            throw new NotImplementedException();
-        }
-
-        private PointF GetMapPosition(PointF Point, double ZoomFactor)
-        {
-            PointF ReturnValue = new PointF();
-            ReturnValue.X = (float)((Point.X + MapSize.Width / 2) * ZoomFactor);
-            ReturnValue.Y = (float)((Point.Y + MapSize.Height / 2) * ZoomFactor);
-            return ReturnValue;
+            PointF Origin = new PointF(Center.X - Diameter, Center.Y - Diameter);
+            SizeF Size = new SizeF(Diameter * 2, Diameter * 2);
+            g.DrawEllipse(Pen, new RectangleF(Origin, Size));
         }
 
         private Pen GetPenForWaypoint(clsWaypoint Waypoint)
         {
-            throw new NotImplementedException();
+            if (Waypoint.Wait.HasValue)
+                return pens[pen.Wait];
+            if (Waypoint.Crossing.HasValue)
+                return pens[pen.Cross];
+            if (Waypoint.Reverse.HasValue)
+                return pens[pen.Reverse];
+            if (Waypoint.Unload.HasValue)
+                return pens[pen.Unload];
+            if (Waypoint.TurnStart.HasValue)
+                return pens[pen.TurnStart];
+            if (Waypoint.TurnEnd.HasValue)
+                return pens[pen.TurnEnd];
+            return pens[pen.Default];
         }
 
-        public void DrawCourse(ref clsCourse Course, ref Graphics g, Rectangle ViewPort, double ZoomFactor)
+        public void DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, double ZoomFactor)
         {
-            PointF MapPosition = new PointF();
+            clsWaypoint PreviousWaypoint;
+            clsWaypoint CurrentWaypoint = Course.waypoint[0];
+
+            PointF MapPosition;
             for (int i = 0; i < Course.waypoint.Count; i++)
             {
-                MapPosition = GetMapPosition(Course.waypoint[i].position, ZoomFactor);
-                if (Visible(MapPosition, ViewPort, ZoomFactor))
+                Pen CurrentPen;
+                if (i != 0 && i < Course.waypoint.Count)
                 {
+                    PreviousWaypoint = CurrentWaypoint;
+                    CurrentWaypoint = Course.waypoint[i];
+                }
+                else
+                {
+                    PreviousWaypoint = null;
+                }
 
+                MapPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(CurrentWaypoint.position, MapSize);
+                if (clsPositionCalculator.Visible(MapPosition, ViewPort))
+                {
+                    if (i == 0)
+                    {
+                        CurrentPen = pens[pen.Start];
+                    }
+                    else if (i == Course.waypoint.Count - 1)
+                    {
+                        CurrentPen = pens[pen.End];
+                    }
+                    else
+                    {
+                        CurrentPen = GetPenForWaypoint(CurrentWaypoint);
+                    }
+                    
+                    DrawCircle(CurrentPen, g, clsPositionCalculator.ScreenPosition(MapPosition, ViewPort, ZoomFactor), 6);
+                    if (PreviousWaypoint != null)
+                    {
+                        PointF PreviousPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize);
+                        PointF PrevScreenPosition = clsPositionCalculator.ScreenPosition(PreviousPosition, ViewPort, ZoomFactor);
+                        g.DrawLine(pens[pen.Default], PrevScreenPosition, clsPositionCalculator.ScreenPosition(MapPosition, ViewPort, ZoomFactor));
+                    }
+                }
+                else if (PreviousWaypoint != null && clsPositionCalculator.Visible(clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize), ViewPort))
+                {
+                    PointF PreviousPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize);
+                    PointF CurrentPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(CurrentWaypoint.position, MapSize);
+                    PointF PrevScreenPosition = clsPositionCalculator.ScreenPosition(PreviousPosition, ViewPort, ZoomFactor);
+                    PointF CurrScreenPosition = clsPositionCalculator.ScreenPosition(CurrentPosition, ViewPort, ZoomFactor);
+                    g.DrawLine(pens[pen.Default], PrevScreenPosition, CurrScreenPosition);
                 }
             }
         }

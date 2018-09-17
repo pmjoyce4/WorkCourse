@@ -53,6 +53,7 @@
     <Compile Include="Classes\clsCourseManager.cs" />
     <Compile Include="Classes\clsFolder.cs" />
     <Compile Include="Classes\clsFolders.cs" />
+    <Compile Include="Classes\clsPositionCalculator.cs" />
     <Compile Include="Classes\clsSlot.cs" />
     <Compile Include="Classes\clsWaypoint.cs" />
     <Compile Include="Classes\clsXmlSaveLoad.cs" />

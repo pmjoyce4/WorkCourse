@@ -115,6 +115,8 @@
             this.panZoomBox1.Name = "panZoomBox1";
             this.panZoomBox1.Size = new System.Drawing.Size(786, 382);
             this.panZoomBox1.TabIndex = 0;
+            this.panZoomBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.panZoomBox1_Paint);
+            this.panZoomBox1.Click += new System.EventHandler(this.panZoomBox1_Click);
             // 
             // splitContainer2
             // 
