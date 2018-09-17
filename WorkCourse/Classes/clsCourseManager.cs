@@ -24,6 +24,8 @@ namespace WorkCourse
             
             foreach (clsSlot CurrentSlot in saves.slot)
             {
+                if (CurrentSlot.isUsed.ToLower() != "true")
+                    continue;
                 clsCourse CurrentCourse = new clsCourse();
                 CurrentCourse = clsXmlSaveLoad.DeserializeXmlFromFile<clsCourse>(Path + System.IO.Path.DirectorySeparatorChar + CurrentSlot.fileName);
                 CurrentSlot.course = CurrentCourse;

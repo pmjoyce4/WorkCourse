@@ -22,9 +22,18 @@ namespace WorkCourse
             Default
         }
 
+        public Size MapSize;
+
         private Dictionary<pen,Pen> pens = new Dictionary<pen, Pen>();
+
         public clsCourseDrawer()
         {
+            CreatePenSet();
+        }
+
+        public clsCourseDrawer(Size MapSize)
+        {
+            this.MapSize = MapSize;
             CreatePenSet();
         }
 
@@ -44,12 +53,20 @@ namespace WorkCourse
 
         private bool Visible(PointF Point, Rectangle ViewPort, double ZoomFactor)
         {
-            return false;
+            throw new NotImplementedException();
         }
 
         private PointF GetMapPosition(PointF Point, double ZoomFactor)
         {
-            return Point;
+            PointF ReturnValue = new PointF();
+            ReturnValue.X = (float)((Point.X + MapSize.Width / 2) * ZoomFactor);
+            ReturnValue.Y = (float)((Point.Y + MapSize.Height / 2) * ZoomFactor);
+            return ReturnValue;
+        }
+
+        private Pen GetPenForWaypoint(clsWaypoint Waypoint)
+        {
+            throw new NotImplementedException();
         }
 
         public void DrawCourse(ref clsCourse Course, ref Graphics g, Rectangle ViewPort, double ZoomFactor)
