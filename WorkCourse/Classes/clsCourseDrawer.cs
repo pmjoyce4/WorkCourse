@@ -24,9 +24,9 @@ namespace WorkCourse
             Default
         }
 
-        public Size MapSize;
+        private Size MapSize;
 
-        private Dictionary<pen,Pen> pens = new Dictionary<pen, Pen>();
+        public Dictionary<pen,Pen> pens = new Dictionary<pen, Pen>();
 
         public clsCourseDrawer()
         {
@@ -88,20 +88,20 @@ namespace WorkCourse
 
         }
 
-        public void DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor)
+        public List<clsWaypoint> DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor, List<clsWaypoint> SelectedWaypoints, int Quality)
         {
             clsWaypoint PreviousWaypoint = null;
             Matrix TransformMatrix = new Matrix();
             Matrix PenMatrix = new Matrix();
             clsWaypoint CurrentWaypoint = Course.waypoint[0];
+            List<clsWaypoint> ReturnList = new List<clsWaypoint>();
 
             TransformMatrix.Translate(((MapSize.Width / 2) - (ViewPort.X)) * ZoomFactor, ((MapSize.Height / 2) - (ViewPort.Y)) * ZoomFactor);
             TransformMatrix.Scale(ZoomFactor, ZoomFactor);
             g.Transform = TransformMatrix;
-            
+
             for (int i = 0; i < Course.waypoint.Count; i++)
             {
-                
                 Pen CurrentPen;
                 if (i != 0 && i < Course.waypoint.Count)
                 {
@@ -111,6 +111,7 @@ namespace WorkCourse
 
                 if (IsOnScreen(CurrentWaypoint.position, ViewPort))
                 {
+                    ReturnList.Add(CurrentWaypoint);
                     if (i == 0)
                     {
                         CurrentPen = pens[pen.Start];
@@ -122,6 +123,11 @@ namespace WorkCourse
                     else
                     {
                         CurrentPen = GetPenForWaypoint(CurrentWaypoint);
+                    }
+
+                    if (SelectedWaypoints != null && SelectedWaypoints.Contains(CurrentWaypoint))
+                    {
+                        CurrentPen = pens[pen.Selected];
                     }
 
                     PenMatrix = TransformMatrix.Clone();
@@ -141,11 +147,14 @@ namespace WorkCourse
                         g.DrawLine(pens[pen.Default], PreviousWaypoint.position, CurrentWaypoint.position);
                     }
                 }
+                if (Quality < 2)
+                    i += 2;
             }
 
             TransformMatrix.Reset();
             TransformMatrix.Translate((MapSize.Width / 2) * -1, (MapSize.Height / 2) * -1);
             g.Transform = TransformMatrix;
+            return ReturnList;
         }
 
     }

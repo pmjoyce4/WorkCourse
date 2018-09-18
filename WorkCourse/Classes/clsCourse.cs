@@ -18,6 +18,8 @@ namespace WorkCourse
         private bool? headlandDirectionCW;
         public clsCourse() { waypoint = new List<clsWaypoint>(); }
         public List<clsWaypoint> waypoint;
+        [XmlIgnore]
+        public bool IsEnabled = false;
 
         [XmlAttribute("workWidth")]
         public string WorkWidthString

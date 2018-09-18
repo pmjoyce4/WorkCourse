@@ -19,6 +19,7 @@ namespace WorkCourse
 
         public void LoadCourses()
         {
+            bool tempFlag = true;
             if (saves == null)
                 return;
             
@@ -29,6 +30,11 @@ namespace WorkCourse
                 clsCourse CurrentCourse = new clsCourse();
                 CurrentCourse = clsXmlSaveLoad.DeserializeXmlFromFile<clsCourse>(Path + System.IO.Path.DirectorySeparatorChar + CurrentSlot.fileName);
                 CurrentSlot.course = CurrentCourse;
+                if (tempFlag)
+                {
+                    CurrentSlot.course.IsEnabled = true;
+                    //tempFlag = false;
+                }
             }
         }
 
