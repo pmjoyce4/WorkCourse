@@ -25,9 +25,20 @@ namespace WorkCourse
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = " BMP|*.bmp";
-            dlg.InitialDirectory = Application.StartupPath;
+
+            if (Properties.Settings.Default.LastMapLocation == null)
+            {
+                dlg.InitialDirectory = Application.StartupPath;
+            }
+            else
+            {
+                dlg.InitialDirectory = Properties.Settings.Default.LastMapLocation;
+            }
+             
             if (dlg.ShowDialog() == DialogResult.OK)
             {
+                Properties.Settings.Default.LastMapLocation = Path.GetDirectoryName(dlg.FileName);
+                Properties.Settings.Default.Save();
                 panZoomBox1.Image = Image.FromFile(dlg.FileName);
             }
         }
@@ -36,9 +47,19 @@ namespace WorkCourse
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = " Xml|courseManager.xml";
-            dlg.InitialDirectory = Application.StartupPath;
+
+            if (Properties.Settings.Default.LastCourseLocation == null)
+            {
+                dlg.InitialDirectory = Application.StartupPath;
+            }
+            else
+            {
+                dlg.InitialDirectory = Properties.Settings.Default.LastCourseLocation;
+            }
             if (dlg.ShowDialog() == DialogResult.OK)
             {
+                Properties.Settings.Default.LastCourseLocation = Path.GetDirectoryName(dlg.FileName);
+                Properties.Settings.Default.Save();
                 CourseManager =  clsXmlSaveLoad.DeserializeXmlFromFile<clsCourseManager>(dlg.FileName);
                 CourseManager.Path = Path.GetDirectoryName(dlg.FileName);
                 CourseManager.LoadCourses();
@@ -47,11 +68,15 @@ namespace WorkCourse
         }
         private void panZoomBox1_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
+            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
             if (CourseManager == null)
                 return;
             foreach (clsSlot Slot in CourseManager.saves.slot)
             {
-                CourseDrawer.DrawCourseNew(Slot.course, e.Graphics, panZoomBox1.ClientRectangle, panZoomBox1.ViewPort, (float)panZoomBox1.ZoomFactor);
+                CourseDrawer.DrawCourse(Slot.course, e.Graphics, panZoomBox1.ClientRectangle, panZoomBox1.ViewPort, (float)panZoomBox1.ZoomFactor);
             }
         }
         private void panZoomBox1_Click(object sender, EventArgs e)

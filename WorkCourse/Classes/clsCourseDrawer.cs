@@ -77,28 +77,39 @@ namespace WorkCourse
             return pens[pen.Default];
         }
 
+        public bool IsOnScreen(PointF Point, Rectangle ViewPort)
+        {
+            PointF ViewPortCoordinates = new PointF(Point.X + MapSize.Width / 2, Point.Y + MapSize.Height / 2);
+            if (ViewPortCoordinates.X < ViewPort.X || ViewPortCoordinates.X > ViewPort.X + ViewPort.Width)
+                return false;
+            if (ViewPortCoordinates.Y < ViewPort.Y || ViewPortCoordinates.Y > ViewPort.Y + ViewPort.Height)
+                return false;
+            return true;
+
+        }
+
         public void DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor)
         {
-            clsWaypoint PreviousWaypoint;
+            clsWaypoint PreviousWaypoint = null;
+            Matrix TransformMatrix = new Matrix();
+            Matrix PenMatrix = new Matrix();
             clsWaypoint CurrentWaypoint = Course.waypoint[0];
-            List<PointF> Lines = new List<PointF>();
-            List<Rectangle> Circles = new List<Rectangle>();
-            PointF MapPosition;
+
+            TransformMatrix.Translate(((MapSize.Width / 2) - (ViewPort.X)) * ZoomFactor, ((MapSize.Height / 2) - (ViewPort.Y)) * ZoomFactor);
+            TransformMatrix.Scale(ZoomFactor, ZoomFactor);
+            g.Transform = TransformMatrix;
+            
             for (int i = 0; i < Course.waypoint.Count; i++)
             {
+                
                 Pen CurrentPen;
                 if (i != 0 && i < Course.waypoint.Count)
                 {
                     PreviousWaypoint = CurrentWaypoint;
                     CurrentWaypoint = Course.waypoint[i];
                 }
-                else
-                {
-                    PreviousWaypoint = null;
-                }
 
-                MapPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(CurrentWaypoint.position, MapSize);
-                if (clsPositionCalculator.Visible(MapPosition, ViewPort))
+                if (IsOnScreen(CurrentWaypoint.position, ViewPort))
                 {
                     if (i == 0)
                     {
@@ -112,82 +123,26 @@ namespace WorkCourse
                     {
                         CurrentPen = GetPenForWaypoint(CurrentWaypoint);
                     }
-                    
-                    DrawCircle(CurrentPen, g, clsPositionCalculator.ScreenPosition(MapPosition, ViewPort, ZoomFactor), 6);
+
+                    PenMatrix = TransformMatrix.Clone();
+                    PenMatrix.Invert();
+                    CurrentPen.Transform = PenMatrix;
+
+                    DrawCircle(CurrentPen, g, CurrentWaypoint.position, 6 / ZoomFactor);
                     if (PreviousWaypoint != null)
                     {
-                        PointF PreviousPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize);
-                        PointF PrevScreenPosition = clsPositionCalculator.ScreenPosition(PreviousPosition, ViewPort, ZoomFactor);
-                        g.DrawLine(pens[pen.Default], PrevScreenPosition, clsPositionCalculator.ScreenPosition(MapPosition, ViewPort, ZoomFactor));
+                        g.DrawLine(pens[pen.Default], PreviousWaypoint.position, CurrentWaypoint.position);
                     }
                 }
-                else if (PreviousWaypoint != null && clsPositionCalculator.Visible(clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize), ViewPort))
-                {
-                    PointF PreviousPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(PreviousWaypoint.position, MapSize);
-                    PointF CurrentPosition = clsPositionCalculator.MapPositionFromWorldCoordinates(CurrentWaypoint.position, MapSize);
-                    PointF PrevScreenPosition = clsPositionCalculator.ScreenPosition(PreviousPosition, ViewPort, ZoomFactor);
-                    PointF CurrScreenPosition = clsPositionCalculator.ScreenPosition(CurrentPosition, ViewPort, ZoomFactor);
-                    g.DrawLine(pens[pen.Default], PrevScreenPosition, CurrScreenPosition);
-                }
-            }
-        }
-
-        public bool IsVisible(PointF Point, Rectangle ViewPort)
-        {
-            if (Point.X < ViewPort.X || Point.X > Point.X + ViewPort.Width)
-                return false;
-            if (Point.Y < ViewPort.Y || Point.Y > Point.Y + ViewPort.Height)
-                return false;
-            return true;
-
-        }
-
-        public void DrawCourseNew(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor)
-        {
-            clsWaypoint PreviousWaypoint;
-            Matrix TransformMatrix = new Matrix();
-            Matrix PenMatrix = new Matrix();
-            clsWaypoint CurrentWaypoint = Course.waypoint[0];
-            List<PointF> Lines = new List<PointF>();
-            List<PointF> Points = new List<PointF>();
-
-            TransformMatrix.Translate(((MapSize.Width / 2) - (ViewPort.X)) * ZoomFactor, ((MapSize.Height / 2) * ZoomFactor - (ViewPort.Y)) * ZoomFactor);
-            TransformMatrix.Scale(ZoomFactor, ZoomFactor);
-            g.Transform = TransformMatrix;
-            
-            for (int i = 0; i < Course.waypoint.Count; i++)
-            {
-                Pen CurrentPen;
-                if (i != 0 && i < Course.waypoint.Count)
-                {
-                    PreviousWaypoint = CurrentWaypoint;
-                    CurrentWaypoint = Course.waypoint[i];
-                }
                 else
                 {
-                    PreviousWaypoint = null;
+                    if (PreviousWaypoint != null && IsOnScreen(PreviousWaypoint.position, ViewPort))
+                    {
+                        g.DrawLine(pens[pen.Default], PreviousWaypoint.position, CurrentWaypoint.position);
+                    }
                 }
-                if (i == 0)
-                {
-                    CurrentPen = pens[pen.Start];
-                }
-                else if (i == Course.waypoint.Count - 1)
-                {
-                    CurrentPen = pens[pen.End];
-                }
-                else
-                {
-                    CurrentPen = GetPenForWaypoint(CurrentWaypoint);
-                }
-
-                PenMatrix = TransformMatrix.Clone();
-                PenMatrix.Invert();
-                CurrentPen.Transform = PenMatrix;
-
-                DrawCircle(CurrentPen, g, CurrentWaypoint.position, 6 / ZoomFactor);
-                Lines.Add(CurrentWaypoint.position);
             }
-            g.DrawLines(pens[pen.Default], Lines.ToArray());
+
             TransformMatrix.Reset();
             TransformMatrix.Translate((MapSize.Width / 2) * -1, (MapSize.Height / 2) * -1);
             g.Transform = TransformMatrix;
