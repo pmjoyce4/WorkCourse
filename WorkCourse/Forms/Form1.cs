@@ -51,7 +51,7 @@ namespace WorkCourse
                 return;
             foreach (clsSlot Slot in CourseManager.saves.slot)
             {
-                CourseDrawer.DrawCourse(Slot.course, e.Graphics, panZoomBox1.ClientRectangle, panZoomBox1.ViewPort, panZoomBox1.ZoomFactor);
+                CourseDrawer.DrawCourseNew(Slot.course, e.Graphics, panZoomBox1.ClientRectangle, panZoomBox1.ViewPort, (float)panZoomBox1.ZoomFactor);
             }
         }
         private void panZoomBox1_Click(object sender, EventArgs e)

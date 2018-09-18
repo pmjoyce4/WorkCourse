@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,11 +77,12 @@ namespace WorkCourse
             return pens[pen.Default];
         }
 
-        public void DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, double ZoomFactor)
+        public void DrawCourse(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor)
         {
             clsWaypoint PreviousWaypoint;
             clsWaypoint CurrentWaypoint = Course.waypoint[0];
-
+            List<PointF> Lines = new List<PointF>();
+            List<Rectangle> Circles = new List<Rectangle>();
             PointF MapPosition;
             for (int i = 0; i < Course.waypoint.Count; i++)
             {
@@ -129,5 +131,67 @@ namespace WorkCourse
                 }
             }
         }
+
+        public bool IsVisible(PointF Point, Rectangle ViewPort)
+        {
+            if (Point.X < ViewPort.X || Point.X > Point.X + ViewPort.Width)
+                return false;
+            if (Point.Y < ViewPort.Y || Point.Y > Point.Y + ViewPort.Height)
+                return false;
+            return true;
+
+        }
+
+        public void DrawCourseNew(clsCourse Course, Graphics g, Rectangle Client, Rectangle ViewPort, float ZoomFactor)
+        {
+            clsWaypoint PreviousWaypoint;
+            Matrix TransformMatrix = new Matrix();
+            Matrix PenMatrix = new Matrix();
+            clsWaypoint CurrentWaypoint = Course.waypoint[0];
+            List<PointF> Lines = new List<PointF>();
+            List<PointF> Points = new List<PointF>();
+
+            TransformMatrix.Translate(((MapSize.Width / 2) - (ViewPort.X)) * ZoomFactor, ((MapSize.Height / 2) * ZoomFactor - (ViewPort.Y)) * ZoomFactor);
+            TransformMatrix.Scale(ZoomFactor, ZoomFactor);
+            g.Transform = TransformMatrix;
+            
+            for (int i = 0; i < Course.waypoint.Count; i++)
+            {
+                Pen CurrentPen;
+                if (i != 0 && i < Course.waypoint.Count)
+                {
+                    PreviousWaypoint = CurrentWaypoint;
+                    CurrentWaypoint = Course.waypoint[i];
+                }
+                else
+                {
+                    PreviousWaypoint = null;
+                }
+                if (i == 0)
+                {
+                    CurrentPen = pens[pen.Start];
+                }
+                else if (i == Course.waypoint.Count - 1)
+                {
+                    CurrentPen = pens[pen.End];
+                }
+                else
+                {
+                    CurrentPen = GetPenForWaypoint(CurrentWaypoint);
+                }
+
+                PenMatrix = TransformMatrix.Clone();
+                PenMatrix.Invert();
+                CurrentPen.Transform = PenMatrix;
+
+                DrawCircle(CurrentPen, g, CurrentWaypoint.position, 6 / ZoomFactor);
+                Lines.Add(CurrentWaypoint.position);
+            }
+            g.DrawLines(pens[pen.Default], Lines.ToArray());
+            TransformMatrix.Reset();
+            TransformMatrix.Translate((MapSize.Width / 2) * -1, (MapSize.Height / 2) * -1);
+            g.Transform = TransformMatrix;
+        }
+
     }
 }
