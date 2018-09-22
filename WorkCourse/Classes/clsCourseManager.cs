@@ -25,14 +25,14 @@ namespace WorkCourse
             
             foreach (clsSlot CurrentSlot in saves.slot)
             {
-                if (CurrentSlot.isUsed.ToLower() != "true")
+                if (CurrentSlot.IsUsed.ToLower() != "true")
                     continue;
                 clsCourse CurrentCourse = new clsCourse();
-                CurrentCourse = clsXmlSaveLoad.DeserializeXmlFromFile<clsCourse>(Path + System.IO.Path.DirectorySeparatorChar + CurrentSlot.fileName);
+                CurrentCourse = clsXmlSaveLoad.DeserializeXmlFromFile<clsCourse>(Path + System.IO.Path.DirectorySeparatorChar + CurrentSlot.FileName);
                 CurrentSlot.course = CurrentCourse;
                 if (tempFlag)
                 {
-                    CurrentSlot.course.IsEnabled = true;
+                    CurrentSlot.course.IsDisplayed = true;
                     //tempFlag = false;
                 }
             }

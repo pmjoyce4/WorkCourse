@@ -13,13 +13,39 @@ namespace WorkCourse
     [XmlRoot("course")]
     public class clsCourse : IXmlSerializable
     {
+
+        #region MemberVariables
+
+        #region Private
+
         private int? numHeadlandLanes;
         private double? workWidth;
         private bool? headlandDirectionCW;
-        public clsCourse() { waypoint = new List<clsWaypoint>(); }
-        public List<clsWaypoint> waypoint;
+        private clsWaypoint PreviousWaypoint = null;
+
+        #endregion
+
+        #region Public
+
+
+        #region NotSerialized
+
         [XmlIgnore]
-        public bool IsEnabled = false;
+        public bool IsDisplayed = false;
+
+        #endregion
+
+        #region Serialized
+
+        public List<clsWaypoint> Waypoints;
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #region Properties
 
         [XmlAttribute("workWidth")]
         public string WorkWidthString
@@ -32,9 +58,10 @@ namespace WorkCourse
             }
             set
             {
-                    workWidth = Convert.ToDouble(value);
+                workWidth = Convert.ToDouble(value);
             }
         }
+
         [XmlAttribute("numHeadlandLanes")]
         public string numHeadlandLanesString
         {
@@ -49,6 +76,7 @@ namespace WorkCourse
                 numHeadlandLanes = Convert.ToInt32(value);
             }
         }
+
         [XmlAttribute("headlandDirectionCW")]
         public string headlandDirectionCWString
         {
@@ -67,7 +95,16 @@ namespace WorkCourse
             }
         }
 
-        #region XML_Stuff
+        #endregion
+
+        #region Constructor
+
+        public clsCourse() { Waypoints = new List<clsWaypoint>(); }
+
+        #endregion
+
+        #region XML_Serialization
+
         // Get the messy XML stuff out of the way. This is only necessary because CoursePlay records waypoints with an
         // index integer the ElementName, e.g. "<waypoint1... <waypoint2... etc. Way to break XML guys.
         public XmlSchema GetSchema()
@@ -103,7 +140,13 @@ namespace WorkCourse
                     string Xml = reader.ReadOuterXml();
                     string ModXml = Xml.Substring(0, "<waypoint".Length) + Xml.Substring(Xml.IndexOf(" "), Xml.Length - Xml.IndexOf(" "));
                     clsWaypoint NewWaypoint = clsXmlSaveLoad.DeserializeXmlFromString<clsWaypoint>(ModXml);
-                    waypoint.Add(NewWaypoint);
+                    if (PreviousWaypoint != null)
+                    {
+                        NewWaypoint.Previous = PreviousWaypoint;
+                        PreviousWaypoint.Next = NewWaypoint;
+                    }
+                    Waypoints.Add(NewWaypoint);
+                    PreviousWaypoint = NewWaypoint;
                 }
 
                 reader.Read();
@@ -117,13 +160,15 @@ namespace WorkCourse
             {
                 foreach ( XmlAttributeAttribute attrib in prop.GetCustomAttributes(typeof(XmlAttributeAttribute),false))
                 {
+                    // The attrib variable is never really used, but this seems to be the most concise way to discern if the 
+                    // property has attributes of a given type.
                     // If we get here at all, our property must be decorated with the XmlAttribute Attribute... Serialize it.
                     if (prop.GetValue(this, null) != null)
                         writer.WriteAttributeString(prop.Name, prop.GetValue(this, null).ToString());
                 }
             }
             int Index = 1;
-            foreach (clsWaypoint CurrentWaypoint in waypoint)
+            foreach (clsWaypoint CurrentWaypoint in Waypoints)
             {
                 string ModString = clsXmlSaveLoad.SerializeXmlToString<clsWaypoint>(CurrentWaypoint);
                 
@@ -131,6 +176,7 @@ namespace WorkCourse
                 Index += 1;
             }
         }
+
         #endregion
     }
 }

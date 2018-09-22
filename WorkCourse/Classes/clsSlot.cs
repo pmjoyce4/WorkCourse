@@ -9,14 +9,14 @@ namespace WorkCourse
 {
     public class clsSlot
     {
-        [XmlAttribute]
-        public string fileName;
-        [XmlAttribute]
-        public string isUsed;
-        [XmlAttribute]
-        public int parent;
-        [XmlAttribute]
-        public string name;
+        [XmlAttribute("fileName")]
+        public string FileName;
+        [XmlAttribute("isUsed")]
+        public string IsUsed;
+        [XmlAttribute("parent")]
+        public int Parent;
+        [XmlAttribute("name")]
+        public string Name;
         [XmlIgnore]
         public clsCourse course;
     }

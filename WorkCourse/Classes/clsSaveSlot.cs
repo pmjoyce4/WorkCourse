@@ -9,8 +9,12 @@ namespace WorkCourse
 {
     public class clsSaveSlot
     {
-        public clsSaveSlot() { slot = new List<clsSlot>(); }
+        public clsSaveSlot()
+        {
+            slot = new EventList.List<clsSlot>();
+        }
+
         [XmlElement("slot")]
-        public List<clsSlot> slot;
+        public EventList.List<clsSlot> slot;
     }
 }

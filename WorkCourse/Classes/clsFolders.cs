@@ -8,8 +8,12 @@ namespace WorkCourse
 {
     public class clsFolders
     {
-        public clsFolders() { folders = new List<clsFolder>(); }
+        public clsFolders()
+        {
+            folders = new EventList.List<clsFolder>();
+        }
+
         [XmlElement("saveSlot")]
-        public List<clsFolder> folders;
+        public EventList.List<clsFolder> folders;
     }
 }

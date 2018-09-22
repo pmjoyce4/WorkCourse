@@ -7,6 +7,8 @@ namespace WorkCourse
 {
     class clsXmlSaveLoad
     {
+        private clsXmlSaveLoad() { }
+
         public static string SerializeXmlToString<T>(T value)
         {
             XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
